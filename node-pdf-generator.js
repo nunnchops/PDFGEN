@@ -12,6 +12,10 @@ function setResponseHeaders(res, filename) {
   res.header('Content-type', 'application/pdf');
 }
 
+//TODO await result of dispatchPDF data at the moment the original
+//call on server.get seems to timeout before the response to the client 
+//re-instates the connection
+
 server.get('/downloads/:filename', function(req, res, next) {
   var filename = req.params.filename;
   file = tmpdir + '/' + filename;
@@ -21,7 +25,7 @@ server.get('/downloads/:filename', function(req, res, next) {
 
     function dispatchPDF(data) {
 var spawn = require('child_process').spawn,
-    rasterize    = spawn('phantomjs', ['rasterize.js', url, '/tmp/' + filename]);
+    rasterize    = spawn('phantomjs', ['rasterize.js', url, file]);
 
 rasterize.stdout.on('data', function (data) {
   fs.createReadStream('/tmp/' + filename).pipe(res);
