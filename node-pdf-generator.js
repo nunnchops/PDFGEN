@@ -5,7 +5,6 @@ var restify = require('restify')
 
 var server = restify.createServer();
 var url = 'some_url'
-var url_orig = 'some_alternative_url'
 
 function setResponseHeaders(res, filename) {
   res.header('Content-disposition', 'inline; filename=' + filename);
